@@ -6,7 +6,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaManager.ViewModels", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaManager.Services", "CinemaManager.Services\CinemaManager.Services.csproj", "{ADBA6C76-C5A2-4A21-909D-433BAC6FD602}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaManager.App", "CinemaManager.App\CinemaManager.App.csproj", "{314256B0-32D2-4280-8E29-B91C2866552B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaManager.ConsoleApp", "CinemaManager.ConsoleApp\CinemaManager.ConsoleApp.csproj", "{314256B0-32D2-4280-8E29-B91C2866552B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaManager.Wpf", "CinemaManager.Wpf\CinemaManager.Wpf.csproj", "{52CA4BBE-1765-44A1-A1C9-F2BA28E5C6C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +32,9 @@ Global
 		{314256B0-32D2-4280-8E29-B91C2866552B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{314256B0-32D2-4280-8E29-B91C2866552B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{314256B0-32D2-4280-8E29-B91C2866552B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52CA4BBE-1765-44A1-A1C9-F2BA28E5C6C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52CA4BBE-1765-44A1-A1C9-F2BA28E5C6C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52CA4BBE-1765-44A1-A1C9-F2BA28E5C6C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52CA4BBE-1765-44A1-A1C9-F2BA28E5C6C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
