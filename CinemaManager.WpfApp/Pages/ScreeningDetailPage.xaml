@@ -1,0 +1,16 @@
+<Page x:Class="CinemaManager.Wpf.Pages.ScreeningDetailPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Screening Detail">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Button Grid.Row="0" Content="← Back" HorizontalAlignment="Left"
+                Margin="0 0 0 16" Padding="10 4" Click="BackButton_Click" />
+
+        <StackPanel Grid.Row="1" x:Name="DetailsPanel" />
+    </Grid>
+</Page>

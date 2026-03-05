@@ -1,0 +1,47 @@
+<Page x:Class="CinemaManager.Wpf.Pages.HallDetailPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Hall Detail">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Button Grid.Row="0" Content="← Back" HorizontalAlignment="Left"
+                Margin="0 0 0 16" Padding="10 4" Click="BackButton_Click" />
+
+        <StackPanel Grid.Row="1" Margin="0 0 0 20">
+            <TextBlock x:Name="HallNameText" FontSize="22" FontWeight="Bold" />
+            <TextBlock x:Name="HallTypeText" Foreground="Gray" Margin="0 4 0 0" />
+            <TextBlock x:Name="SeatsText" Foreground="Gray" />
+            <TextBlock x:Name="TotalDurationText" Foreground="Gray" />
+        </StackPanel>
+
+        <TextBlock Grid.Row="2" Text="Screenings" FontSize="16"
+                   FontWeight="SemiBold" Margin="0 0 0 8" />
+
+        <ListBox Grid.Row="3"
+                 x:Name="ScreeningListBox"
+                 SelectionChanged="ScreeningListBox_SelectionChanged">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Margin="4 6">
+                        <TextBlock Text="{Binding MovieTitle}" FontSize="14" FontWeight="SemiBold" />
+                        <TextBlock Foreground="Gray">
+                            <Run Text="{Binding StartTime, StringFormat=HH:mm, Mode=OneWay}" />
+                            <Run Text="–" />
+                            <Run Text="{Binding EndTime, StringFormat=HH:mm, Mode=OneWay}" />
+                            <Run Text=" · " />
+                            <Run Text="{Binding Genre, Mode=OneWay}" />
+                            <Run Text=" · " />
+                            <Run Text="{Binding ReleaseYear, Mode=OneWay}" />
+                        </TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Page>

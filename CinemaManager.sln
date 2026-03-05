@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaManager.Services", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaManager.ConsoleApp", "CinemaManager.ConsoleApp\CinemaManager.ConsoleApp.csproj", "{314256B0-32D2-4280-8E29-B91C2866552B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaManager.Wpf", "CinemaManager.Wpf\CinemaManager.Wpf.csproj", "{52CA4BBE-1765-44A1-A1C9-F2BA28E5C6C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CinemaManager.WpfApp", "CinemaManager.WpfApp\CinemaManager.WpfApp.csproj", "{52CA4BBE-1765-44A1-A1C9-F2BA28E5C6C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
