@@ -3,7 +3,7 @@ using CinemaManager.ViewModels;
 
 namespace CinemaManager.Services;
 
-public class CinemaRepository {
+public class CinemaRepository : ICinemaRepository {
     public IReadOnlyList<CinemaHall> GetAllHalls() =>
         FakeDataStorage.CinemaHalls;
 
