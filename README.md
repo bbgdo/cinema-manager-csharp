@@ -1,43 +1,45 @@
-﻿# CinemaManager
+# CinemaManager
 
-Console app for browsing cinema halls and their screening schedules. Lab work 1 — C# basics and OOP.
+WPF app for browsing cinema halls and their screening schedules. Lab work 3 — 3-layer architecture + MVVM.
 
 ## Projects
 
 | Project | Type | Purpose |
 |---|---|---|
-| `CinemaManager.Models` | Class Library | Storage models — raw data only, no computed fields |
-| `CinemaManager.ViewModels` | Class Library | Display/edit models — computed fields, formatting helpers |
-| `CinemaManager.Services` | Class Library | Repository and in-memory seed data |
-| `CinemaManager.App` | Console App | Entry point, all UI logic |
+| `CinemaManager.Models` | Class Library | DB models — raw data only: `CinemaHall`, `Screening`, enums |
+| `CinemaManager.Services` | Class Library | Repository layer — `ICinemaRepository`, `CinemaRepository`, `FakeDataStorage` |
+| `CinemaManager.Application` | Class Library | Service layer — `ICinemaService`, `CinemaService`, DTOs |
+| `CinemaManager.ViewModels` | Class Library | MVVM ViewModels, `INavigationService`, `RelayCommand` |
+| `CinemaManager.WpfApp` | WPF App | 3 pages, `FrameNavigationService`, value converters |
 
 ## Project references
 
 ```
-App → Services, ViewModels
-Services → Models, ViewModels
-ViewModels → Models
+Models ← Services ← Application ← ViewModels ← WpfApp
+                                   ↗
+                     Application ←
 ```
 
 ## Architecture notes
 
-**Storage vs view models.** `CinemaHall` and `Screening` hold only what would be stored in a database — no collections, no computed fields. `CinemaHallView` and `ScreeningView` wrap those and add things like `EndTime` and `TotalScreeningsDuration`.
+**3 layers.** Repository layer returns raw models. Service layer maps them to DTOs and handles all formatting. WpfApp works only with DTOs — it never imports `CinemaManager.Models` or `CinemaManager.Services` types directly.
 
-**Seed data access.** `FakeDataStorage` is `internal`, so nothing outside `CinemaManager.Services` can touch it directly. All data goes through `CinemaRepository`.
+**MVVM.** ViewModels have no WPF dependencies. Code-behind files contain only `InitializeComponent`, `DataContext = vm`, and the `SelectionChanged` handler (kept there because clearing `SelectedItem` cleanly has no pure MVVM equivalent in WPF).
 
-**Lazy loading.** Screenings for a hall are loaded only when the user selects that hall. Calling `LoadScreeningsForHall` more than once on the same instance is a no-op.
+**Navigation.** `INavigationService` is defined in the ViewModels project so ViewModels can trigger navigation without referencing `System.Windows.Controls.Frame`. `FrameNavigationService` in WpfApp implements it.
+
+**DI.** `ICinemaRepository` and `ICinemaService` are wired in `App.xaml.cs` via `Microsoft.Extensions.DependencyInjection`. Pages are constructed manually since they receive ViewModel instances, not resolved services.
+
+**Seed data.** `FakeDataStorage` is `internal` — nothing outside `CinemaManager.Services` can touch it.
 
 ## Running
 
 ```bash
-dotnet run --project CinemaManager.App
+dotnet run --project CinemaManager.WpfApp
 ```
 
 ## Navigation
 
 ```
-Hall list       → enter hall ID to open detail
-Hall detail     → enter screening number for details, b to go back
-Screening detail→ Enter to go back
-Hall list       → q to quit
+Hall list → click a hall card → Hall detail with screenings → click a screening card → Screening detail → Back
 ```
