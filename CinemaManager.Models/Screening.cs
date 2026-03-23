@@ -9,6 +9,7 @@ public class Screening {
     public DateTime StartTime { get; set; }
 
     public int DurationMinutes { get; set; }
+    public string PosterFileName { get; set; } = string.Empty;
 
     public Screening(
         int id,

@@ -18,6 +18,17 @@ public class CinemaHallView {
     public TimeSpan TotalScreeningsDuration =>
         TimeSpan.FromMinutes(Screenings.Sum(s => s.DurationMinutes));
 
+    public string HallTypeDisplay => HallType.ToDisplayName();
+
+    public string TotalDurationDisplay
+    {
+        get
+        {
+            var t = TotalScreeningsDuration;
+            return $"{(int)t.TotalHours}h {t.Minutes:D2}m total";
+        }
+    }
+
     public CinemaHallView(CinemaHall source)
     {
         Id = source.Id;

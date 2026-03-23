@@ -11,21 +11,11 @@ public partial class HallDetailPage
     {
         InitializeComponent();
         _hall = hall;
-
-        HallNameText.Text = hall.Name;
-        HallTypeText.Text = $"Type: {hall.HallType}";
-        SeatsText.Text = $"Seats: {hall.SeatsCount}";
-
-        var total = hall.TotalScreeningsDuration;
-        TotalDurationText.Text = $"Total duration: {(int)total.TotalHours}h {total.Minutes:D2}m";
-
-        ScreeningListBox.ItemsSource = hall.Screenings;
+        DataContext = hall;
     }
 
-    private void BackButton_Click(object sender, System.Windows.RoutedEventArgs e)
-    {
+    private void BackButton_Click(object sender, System.Windows.RoutedEventArgs e) =>
         NavigationService?.GoBack();
-    }
 
     private void ScreeningListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {

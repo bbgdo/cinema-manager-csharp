@@ -22,8 +22,16 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Resource Include="Assets\Posters\**\*" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\CinemaManager.Services\CinemaManager.Services.csproj" />
         <ProjectReference Include="..\CinemaManager.ViewModels\CinemaManager.ViewModels.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Assets\Posters\" />
     </ItemGroup>
 
 </Project>
