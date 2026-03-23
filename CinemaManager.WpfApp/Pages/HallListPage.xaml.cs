@@ -1,25 +1,23 @@
 using System.Windows.Controls;
-using CinemaManager.Services;
+using CinemaManager.Application.Dtos;
 using CinemaManager.ViewModels;
 
 namespace CinemaManager.Wpf.Pages;
 
-public partial class HallListPage
-{
-    private readonly ICinemaRepository _repository;
+public partial class HallListPage {
+    private readonly HallListViewModel _vm;
 
-    public HallListPage(ICinemaRepository repository)
+    public HallListPage(HallListViewModel vm)
     {
         InitializeComponent();
-        _repository = repository;
-        HallListBox.ItemsSource = _repository.GetAllHallViews();
+        _vm = vm;
+        DataContext = vm;
     }
 
     private void HallListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (HallListBox.SelectedItem is not CinemaHallView hall) return;
-        _repository.LoadScreeningsForHall(hall);
-        NavigationService?.Navigate(new HallDetailPage(hall));
+        if (HallListBox.SelectedItem is not CinemaHallListItem hall) return;
+        _vm.OnHallSelected(hall);
         HallListBox.SelectedItem = null;
     }
 }

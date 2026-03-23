@@ -1,21 +1,13 @@
-using System.Windows;
+using System.Windows.Controls;
 using CinemaManager.ViewModels;
 
 namespace CinemaManager.Wpf.Pages;
 
-public partial class ScreeningDetailPage
+public partial class ScreeningDetailPage : Page
 {
-    public ScreeningView Screening { get; }
-    public string HallName { get; }
-
-    public ScreeningDetailPage(ScreeningView screening, string hallName)
+    public ScreeningDetailPage(ScreeningDetailViewModel vm)
     {
-        Screening = screening;
-        HallName = hallName;
         InitializeComponent();
-        DataContext = this;
+        DataContext = vm;
     }
-
-    private void BackButton_Click(object sender, RoutedEventArgs e) =>
-        NavigationService?.GoBack();
 }

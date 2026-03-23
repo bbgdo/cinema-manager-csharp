@@ -31,6 +31,7 @@
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <ListBox x:Name="HallListBox"
                      Margin="36 28 20 28"
+                     ItemsSource="{Binding Halls}"
                      Style="{StaticResource CleanLB}"
                      ItemContainerStyle="{StaticResource CleanLBI}"
                      SelectionChanged="HallListBox_SelectionChanged">
