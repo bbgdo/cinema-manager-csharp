@@ -1,7 +1,10 @@
-﻿<Window x:Class="CinemaManager.Wpf.MainWindow"
+<Window x:Class="CinemaManager.Wpf.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Cinema Manager" Height="600" Width="860"
-        WindowStartupLocation="CenterScreen">
-    <Frame x:Name="RootFrame" NavigationUIVisibility="Hidden" />
+        Title="Cinema Manager" Height="680" Width="980"
+        MinHeight="520" MinWidth="680"
+        WindowStartupLocation="CenterScreen"
+        Background="#0C0C14"
+        ResizeMode="CanResizeWithGrip">
+    <Frame x:Name="RootFrame" NavigationUIVisibility="Hidden" Background="#0C0C14"/>
 </Window>

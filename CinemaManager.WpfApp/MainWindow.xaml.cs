@@ -1,4 +1,7 @@
-﻿using System.Windows;
+using System.Windows;
+using CinemaManager.Application;
+using CinemaManager.ViewModels;
+using CinemaManager.Wpf.Navigation;
 using CinemaManager.Wpf.Pages;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +12,11 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        RootFrame.Navigate(App.Services.GetRequiredService<HallListPage>());
+
+        var cinemaService = App.Services.GetRequiredService<ICinemaService>();
+        var navigation = new FrameNavigationService(RootFrame, cinemaService);
+        var vm = new HallListViewModel(cinemaService, navigation);
+
+        RootFrame.Navigate(new HallListPage(vm));
     }
 }

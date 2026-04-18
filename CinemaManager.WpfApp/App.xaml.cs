@@ -1,5 +1,5 @@
-﻿using CinemaManager.Services;
-using CinemaManager.Wpf.Pages;
+using CinemaManager.Application;
+using CinemaManager.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
@@ -13,9 +13,7 @@ public partial class App
     {
         var services = new ServiceCollection();
         services.AddSingleton<ICinemaRepository, CinemaRepository>();
-        services.AddTransient<HallListPage>();
-        services.AddTransient<HallDetailPage>();
-        services.AddTransient<ScreeningDetailPage>();
+        services.AddSingleton<ICinemaService, CinemaService>();
         Services = services.BuildServiceProvider();
 
         new MainWindow().Show();

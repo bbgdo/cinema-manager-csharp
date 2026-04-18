@@ -6,5 +6,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\CinemaManager.Models\CinemaManager.Models.csproj" />
+    <ProjectReference Include="..\CinemaManager.Services\CinemaManager.Services.csproj" />
   </ItemGroup>
 </Project>

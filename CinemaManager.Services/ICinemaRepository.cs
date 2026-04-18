@@ -1,9 +1,10 @@
-using CinemaManager.ViewModels;
+using CinemaManager.Models;
 
 namespace CinemaManager.Services;
 
 public interface ICinemaRepository
 {
-    List<CinemaHallView> GetAllHallViews();
-    void LoadScreeningsForHall(CinemaHallView hallView);
+    IReadOnlyList<CinemaHall> GetAllHalls();
+    IReadOnlyList<Screening> GetScreeningsByHall(int hallId);
+    Screening? GetScreeningById(int id);
 }
