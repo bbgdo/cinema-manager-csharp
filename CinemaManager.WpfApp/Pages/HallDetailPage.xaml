@@ -4,121 +4,135 @@
       Title="Hall Detail">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <Border Grid.Row="0" Padding="36 26 36 24"
-                BorderThickness="0 0 0 1" BorderBrush="{StaticResource BorderCol}">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#16162A" Offset="0"/>
-                    <GradientStop Color="#0C0C14" Offset="1"/>
-                </LinearGradientBrush>
-            </Border.Background>
-            <StackPanel>
-                <Button Content="&#8592; All Halls" Style="{StaticResource BackBtn}"
-                        Command="{Binding BackCommand}" Margin="0 0 0 18"/>
+            <Border Grid.Row="0" Padding="36 26 36 24"
+                    BorderThickness="0 0 0 1" BorderBrush="{StaticResource BorderCol}">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#16162A" Offset="0"/>
+                        <GradientStop Color="#0C0C14" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <StackPanel>
+                    <Button Content="&#8592; All Halls" Style="{StaticResource BackBtn}"
+                            Command="{Binding BackCommand}" Margin="0 0 0 18"/>
 
-                <TextBlock Text="{Binding Hall.Name}" FontSize="28" FontWeight="Bold" Margin="0 0 0 14"/>
+                    <TextBlock Text="{Binding Hall.Name}" FontSize="28" FontWeight="Bold" Margin="0 0 0 14"/>
 
-                <StackPanel Orientation="Horizontal">
-                    <Border CornerRadius="6" Padding="12 5" Margin="0 0 8 0"
-                            Background="{Binding Hall.HallTypeDisplay, Converter={StaticResource HallBadgeColor}}">
-                        <TextBlock Text="{Binding Hall.HallTypeDisplay}"
-                                   FontSize="12" FontWeight="SemiBold" Foreground="White"/>
-                    </Border>
-                    <Border CornerRadius="6" Padding="12 5" Margin="0 0 8 0"
-                            Background="{StaticResource BgInfoChip}">
-                        <TextBlock FontSize="12" Foreground="{StaticResource FgMuted}">
-                            <Run Text="{Binding Hall.SeatsCount, Mode=OneWay}"/>
-                            <Run Text=" seats"/>
-                        </TextBlock>
-                    </Border>
-                    <Border CornerRadius="6" Padding="12 5"
-                            Background="{StaticResource BgInfoChip}">
-                        <TextBlock Text="{Binding Hall.TotalDurationDisplay}"
-                                   FontSize="12" Foreground="{StaticResource FgMuted}"/>
-                    </Border>
+                    <StackPanel Orientation="Horizontal">
+                        <Border CornerRadius="6" Padding="12 5" Margin="0 0 8 0"
+                                Background="{Binding Hall.HallTypeDisplay, Converter={StaticResource HallBadgeColor}}">
+                            <TextBlock Text="{Binding Hall.HallTypeDisplay}"
+                                       FontSize="12" FontWeight="SemiBold" Foreground="White"/>
+                        </Border>
+                        <Border CornerRadius="6" Padding="12 5" Margin="0 0 8 0"
+                                Background="{StaticResource BgInfoChip}">
+                            <TextBlock FontSize="12" Foreground="{StaticResource FgMuted}">
+                                <Run Text="{Binding Hall.SeatsCount, Mode=OneWay}"/>
+                                <Run Text=" seats"/>
+                            </TextBlock>
+                        </Border>
+                        <Border CornerRadius="6" Padding="12 5"
+                                Background="{StaticResource BgInfoChip}">
+                            <TextBlock Text="{Binding Hall.TotalDurationDisplay}"
+                                       FontSize="12" Foreground="{StaticResource FgMuted}"/>
+                        </Border>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
+            </Border>
+
+            <TextBlock Grid.Row="1" Text="Screenings"
+                       FontSize="16" FontWeight="SemiBold"
+                       Margin="36 20 36 0"/>
+
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                <ListBox x:Name="ScreeningListBox"
+                         Margin="36 14 20 28"
+                         ItemsSource="{Binding Hall.Screenings}"
+                         Style="{StaticResource CleanLB}"
+                         ItemContainerStyle="{StaticResource CleanLBI}"
+                         SelectionChanged="ScreeningListBox_SelectionChanged">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0 0 14 14" CornerRadius="10"
+                                    Effect="{StaticResource CardShadow}">
+                                <Border x:Name="Card" CornerRadius="10" Width="158"
+                                        Background="{StaticResource BgCard}"
+                                        ClipToBounds="True" Cursor="Hand">
+                                    <StackPanel>
+
+                                        <Grid Height="224">
+                                            <Border>
+                                                <Border.Background>
+                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                        <GradientStop Color="#252542" Offset="0"/>
+                                                        <GradientStop Color="#0C0C14" Offset="1"/>
+                                                    </LinearGradientBrush>
+                                                </Border.Background>
+                                            </Border>
+                                            <TextBlock Text="&#127902;" FontSize="28"
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                       Foreground="{StaticResource FgSubtle}"/>
+                                            <Image Source="{Binding PosterFileName, Converter={StaticResource PosterConverter}}"
+                                                   Stretch="UniformToFill"
+                                                   RenderOptions.BitmapScalingMode="HighQuality"/>
+                                        </Grid>
+
+                                        <StackPanel Margin="11 9 11 11">
+                                            <TextBlock Text="{Binding MovieTitle}"
+                                                       FontSize="13" FontWeight="SemiBold"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Margin="0 0 0 6"/>
+                                            <Border CornerRadius="4" Padding="6 2"
+                                                    HorizontalAlignment="Left"
+                                                    Background="{StaticResource BgGenreChip}"
+                                                    Margin="0 0 0 5">
+                                                <TextBlock Text="{Binding GenreDisplay}"
+                                                           FontSize="11"
+                                                           Foreground="{StaticResource AccentAmber}"/>
+                                            </Border>
+                                            <TextBlock Text="{Binding TimeRange}"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource FgMuted}"/>
+                                        </StackPanel>
+
+                                    </StackPanel>
+                                </Border>
+                            </Border>
+
+                            <DataTemplate.Triggers>
+                                <Trigger SourceName="Card" Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Card" Property="Background"
+                                            Value="{StaticResource BgCardHov}"/>
+                                </Trigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+        </Grid>
+
+        <Border Style="{StaticResource ErrorBanner}"
+                Visibility="{Binding HasError, Converter={StaticResource BoolToVis}}">
+            <TextBlock Text="{Binding ErrorMessage}" TextWrapping="Wrap"
+                       Foreground="{StaticResource Accent}" FontSize="13"/>
         </Border>
 
-        <TextBlock Grid.Row="1" Text="Screenings"
-                   FontSize="16" FontWeight="SemiBold"
-                   Margin="36 20 36 0"/>
-
-        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-            <ListBox x:Name="ScreeningListBox"
-                     Margin="36 14 20 28"
-                     ItemsSource="{Binding Hall.Screenings}"
-                     Style="{StaticResource CleanLB}"
-                     ItemContainerStyle="{StaticResource CleanLBI}"
-                     SelectionChanged="ScreeningListBox_SelectionChanged">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Border Margin="0 0 14 14" CornerRadius="10"
-                                Effect="{StaticResource CardShadow}">
-                            <Border x:Name="Card" CornerRadius="10" Width="158"
-                                    Background="{StaticResource BgCard}"
-                                    ClipToBounds="True" Cursor="Hand">
-                                <StackPanel>
-
-                                    <Grid Height="224">
-                                        <Border>
-                                            <Border.Background>
-                                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                                                    <GradientStop Color="#252542" Offset="0"/>
-                                                    <GradientStop Color="#0C0C14" Offset="1"/>
-                                                </LinearGradientBrush>
-                                            </Border.Background>
-                                        </Border>
-                                        <TextBlock Text="&#127902;" FontSize="28"
-                                                   HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                   Foreground="{StaticResource FgSubtle}"/>
-                                        <Image Source="{Binding PosterFileName, Converter={StaticResource PosterConverter}}"
-                                               Stretch="UniformToFill"
-                                               RenderOptions.BitmapScalingMode="HighQuality"/>
-                                    </Grid>
-
-                                    <StackPanel Margin="11 9 11 11">
-                                        <TextBlock Text="{Binding MovieTitle}"
-                                                   FontSize="13" FontWeight="SemiBold"
-                                                   TextTrimming="CharacterEllipsis"
-                                                   Margin="0 0 0 6"/>
-                                        <Border CornerRadius="4" Padding="6 2"
-                                                HorizontalAlignment="Left"
-                                                Background="{StaticResource BgGenreChip}"
-                                                Margin="0 0 0 5">
-                                            <TextBlock Text="{Binding GenreDisplay}"
-                                                       FontSize="11"
-                                                       Foreground="{StaticResource AccentAmber}"/>
-                                        </Border>
-                                        <TextBlock Text="{Binding TimeRange}"
-                                                   FontSize="12"
-                                                   Foreground="{StaticResource FgMuted}"/>
-                                    </StackPanel>
-
-                                </StackPanel>
-                            </Border>
-                        </Border>
-
-                        <DataTemplate.Triggers>
-                            <Trigger SourceName="Card" Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Card" Property="Background"
-                                        Value="{StaticResource BgCardHov}"/>
-                            </Trigger>
-                        </DataTemplate.Triggers>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </ScrollViewer>
+        <Border Style="{StaticResource BusyOverlay}"
+                Visibility="{Binding IsBusy, Converter={StaticResource BoolToVis}}">
+            <ProgressBar Style="{StaticResource IndeterminateBar}"
+                         HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
     </Grid>
 </Page>

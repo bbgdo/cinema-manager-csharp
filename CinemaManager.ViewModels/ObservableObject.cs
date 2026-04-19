@@ -9,6 +9,21 @@ public class ObservableObject : INotifyPropertyChanged
 
     public bool IsBusy { get; private set; }
 
+    private string? _errorMessage;
+    public string? ErrorMessage
+    {
+        get => _errorMessage;
+        protected set
+        {
+            if (_errorMessage == value) return;
+            _errorMessage = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(HasError));
+        }
+    }
+
+    public bool HasError => !string.IsNullOrEmpty(ErrorMessage);
+
     protected void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
@@ -20,15 +35,29 @@ public class ObservableObject : INotifyPropertyChanged
         return true;
     }
 
-    protected void BeginBusy()
+    protected IDisposable EnterBusy()
     {
         IsBusy = true;
         OnPropertyChanged(nameof(IsBusy));
+        return new BusyScope(this);
     }
 
-    protected void EndBusy()
+    protected async Task RunAsync(Func<Task> operation)
     {
-        IsBusy = false;
-        OnPropertyChanged(nameof(IsBusy));
+        ErrorMessage = null;
+        using (EnterBusy())
+        {
+            try { await operation(); }
+            catch (Exception ex) { ErrorMessage = ex.Message; }
+        }
+    }
+
+    private sealed class BusyScope(ObservableObject owner) : IDisposable
+    {
+        public void Dispose()
+        {
+            owner.IsBusy = false;
+            owner.OnPropertyChanged(nameof(IsBusy));
+        }
     }
 }

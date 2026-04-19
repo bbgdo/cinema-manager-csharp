@@ -13,18 +13,8 @@ public class HallListViewModel(ICinemaService cinemaService, INavigationService 
         private set => SetProperty(ref _halls, value);
     }
 
-    public async Task LoadAsync()
-    {
-        BeginBusy();
-        try
-        {
-            Halls = await cinemaService.GetHallListAsync();
-        }
-        finally
-        {
-            EndBusy();
-        }
-    }
+    public async Task LoadAsync() =>
+        await RunAsync(async () => Halls = await cinemaService.GetHallListAsync());
 
     public void OnHallSelected(CinemaHallListItem hall) =>
         navigation.GoToHallDetail(hall.Id);

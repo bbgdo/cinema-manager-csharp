@@ -27,18 +27,8 @@ public class HallDetailViewModel : ObservableObject
         BackCommand = new RelayCommand(() => _navigation.GoBack());
     }
 
-    public async Task LoadAsync()
-    {
-        BeginBusy();
-        try
-        {
-            Hall = await _cinemaService.GetHallDetailAsync(_hallId);
-        }
-        finally
-        {
-            EndBusy();
-        }
-    }
+    public async Task LoadAsync() =>
+        await RunAsync(async () => Hall = await _cinemaService.GetHallDetailAsync(_hallId));
 
     public void OnScreeningSelected(ScreeningListItem screening) =>
         _navigation.GoToScreeningDetail(screening.Id, Hall?.Name ?? string.Empty);

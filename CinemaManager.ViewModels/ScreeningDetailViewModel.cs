@@ -28,16 +28,6 @@ public class ScreeningDetailViewModel : ObservableObject
         BackCommand = new RelayCommand(() => navigation.GoBack());
     }
 
-    public async Task LoadAsync()
-    {
-        BeginBusy();
-        try
-        {
-            Screening = await _cinemaService.GetScreeningDetailAsync(_screeningId);
-        }
-        finally
-        {
-            EndBusy();
-        }
-    }
+    public async Task LoadAsync() =>
+        await RunAsync(async () => Screening = await _cinemaService.GetScreeningDetailAsync(_screeningId));
 }

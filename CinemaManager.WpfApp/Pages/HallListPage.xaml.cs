@@ -6,13 +6,19 @@ namespace CinemaManager.Wpf.Pages;
 
 public partial class HallListPage {
     private readonly HallListViewModel _vm;
+    private bool _loaded;
 
     public HallListPage(HallListViewModel vm)
     {
         InitializeComponent();
         _vm = vm;
         DataContext = vm;
-        Loaded += async (_, _) => await _vm.LoadAsync();
+        Loaded += async (_, _) =>
+        {
+            if (_loaded) return;
+            _loaded = true;
+            await _vm.LoadAsync();
+        };
     }
 
     private void HallListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
