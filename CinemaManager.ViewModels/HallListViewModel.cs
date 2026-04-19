@@ -3,18 +3,29 @@ using CinemaManager.Application.Dtos;
 
 namespace CinemaManager.ViewModels;
 
-public class HallListViewModel
+public class HallListViewModel(ICinemaService cinemaService, INavigationService navigation) : ObservableObject
 {
-    private readonly INavigationService _navigation;
+    private IReadOnlyList<CinemaHallListItem>? _halls;
 
-    public IReadOnlyList<CinemaHallListItem> Halls { get; }
-
-    public HallListViewModel(ICinemaService cinemaService, INavigationService navigation)
+    public IReadOnlyList<CinemaHallListItem>? Halls
     {
-        _navigation = navigation;
-        Halls = cinemaService.GetHallList();
+        get => _halls;
+        private set => SetProperty(ref _halls, value);
+    }
+
+    public async Task LoadAsync()
+    {
+        BeginBusy();
+        try
+        {
+            Halls = await cinemaService.GetHallListAsync();
+        }
+        finally
+        {
+            EndBusy();
+        }
     }
 
     public void OnHallSelected(CinemaHallListItem hall) =>
-        _navigation.GoToHallDetail(hall.Id);
+        navigation.GoToHallDetail(hall.Id);
 }

@@ -6,8 +6,8 @@ namespace CinemaManager.Application;
 
 public class CinemaService(ICinemaRepository repository) : ICinemaService
 {
-    public IReadOnlyList<CinemaHallListItem> GetHallList() =>
-        repository.GetAllHalls()
+    public async Task<IReadOnlyList<CinemaHallListItem>> GetHallListAsync() =>
+        (await repository.GetAllHallsAsync())
             .Select(h => new CinemaHallListItem
             {
                 Id = h.Id,
@@ -17,10 +17,11 @@ public class CinemaService(ICinemaRepository repository) : ICinemaService
             })
             .ToList();
 
-    public CinemaHallDetail GetHallDetail(int hallId)
+    public async Task<CinemaHallDetail> GetHallDetailAsync(int hallId)
     {
-        var hall = repository.GetAllHalls().First(h => h.Id == hallId);
-        var screenings = repository.GetScreeningsByHall(hallId);
+        var hall = await repository.GetHallByIdAsync(hallId)
+            ?? throw new InvalidOperationException($"Hall {hallId} not found.");
+        var screenings = await repository.GetScreeningsByHallAsync(hallId);
 
         var total = TimeSpan.FromMinutes(screenings.Sum(s => s.DurationMinutes));
 
@@ -35,9 +36,9 @@ public class CinemaService(ICinemaRepository repository) : ICinemaService
         };
     }
 
-    public ScreeningDetail GetScreeningDetail(int screeningId)
+    public async Task<ScreeningDetail> GetScreeningDetailAsync(int screeningId)
     {
-        var s = repository.GetScreeningById(screeningId)
+        var s = await repository.GetScreeningByIdAsync(screeningId)
             ?? throw new InvalidOperationException($"Screening {screeningId} not found.");
 
         var endTime = s.StartTime.AddMinutes(s.DurationMinutes);

@@ -12,6 +12,7 @@ public partial class HallListPage {
         InitializeComponent();
         _vm = vm;
         DataContext = vm;
+        Loaded += async (_, _) => await _vm.LoadAsync();
     }
 
     private void HallListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

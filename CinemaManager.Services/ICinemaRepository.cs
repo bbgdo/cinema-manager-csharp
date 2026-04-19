@@ -4,7 +4,8 @@ namespace CinemaManager.Services;
 
 public interface ICinemaRepository
 {
-    IReadOnlyList<CinemaHall> GetAllHalls();
-    IReadOnlyList<Screening> GetScreeningsByHall(int hallId);
-    Screening? GetScreeningById(int id);
+    Task<IReadOnlyList<CinemaHall>> GetAllHallsAsync();
+    Task<CinemaHall?> GetHallByIdAsync(int id);
+    Task<IReadOnlyList<Screening>> GetScreeningsByHallAsync(int hallId);
+    Task<Screening?> GetScreeningByIdAsync(int id);
 }

@@ -5,6 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\CinemaManager.Models\CinemaManager.Models.csproj" />
   </ItemGroup>
 </Project>

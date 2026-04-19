@@ -2,11 +2,9 @@ using CinemaManager.Models;
 
 namespace CinemaManager.Services;
 
-internal static class FakeDataStorage {
-    internal static IReadOnlyList<CinemaHall> CinemaHalls { get; } = BuildHalls();
-    internal static IReadOnlyList<Screening> Screenings { get; } = BuildScreenings();
-
-    private static List<CinemaHall> BuildHalls() =>
+internal static class SeedData
+{
+    internal static IEnumerable<CinemaHall> GetHalls() =>
     [
         new(1, "Horizon Hall", 180, HallType.Imax),
         new(2, "Meridian Hall", 90, HallType.Standard2D),
@@ -14,7 +12,7 @@ internal static class FakeDataStorage {
         new(4, "This dimension Hall", 90, HallType.ThreeD),
     ];
 
-    private static List<Screening> BuildScreenings()
+    internal static IEnumerable<Screening> GetScreenings()
     {
         var baseDate = new DateTime(2025, 6, 14);
 

@@ -5,7 +5,6 @@ using CinemaManager.ViewModels;
 namespace CinemaManager.Wpf.Pages;
 
 public partial class HallDetailPage {
-    
     private readonly HallDetailViewModel _vm;
 
     public HallDetailPage(HallDetailViewModel vm)
@@ -13,6 +12,7 @@ public partial class HallDetailPage {
         InitializeComponent();
         _vm = vm;
         DataContext = vm;
+        Loaded += async (_, _) => await _vm.LoadAsync();
     }
 
     private void ScreeningListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
