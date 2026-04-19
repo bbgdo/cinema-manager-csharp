@@ -28,4 +28,28 @@ public class CinemaRepository(IDbContextFactory<CinemaDbContext> factory) : ICin
         await using var ctx = await factory.CreateDbContextAsync();
         return await ctx.Screenings.AsNoTracking().FirstOrDefaultAsync(s => s.Id == id);
     }
+
+    public async Task<int> AddHallAsync(CinemaHall hall)
+    {
+        await using var ctx = await factory.CreateDbContextAsync();
+        ctx.Halls.Add(hall);
+        await ctx.SaveChangesAsync();
+        return hall.Id;
+    }
+
+    public async Task UpdateHallAsync(CinemaHall hall)
+    {
+        await using var ctx = await factory.CreateDbContextAsync();
+        ctx.Halls.Update(hall);
+        await ctx.SaveChangesAsync();
+    }
+
+    public async Task DeleteHallAsync(int hallId)
+    {
+        await using var ctx = await factory.CreateDbContextAsync();
+        var hall = await ctx.Halls.FindAsync(hallId);
+        if (hall is null) return;
+        ctx.Halls.Remove(hall);
+        await ctx.SaveChangesAsync();
+    }
 }

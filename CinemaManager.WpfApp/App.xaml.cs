@@ -1,5 +1,7 @@
 using CinemaManager.Application;
 using CinemaManager.Services;
+using CinemaManager.ViewModels;
+using CinemaManager.Wpf.Dialogs;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
@@ -24,6 +26,7 @@ public partial class App
             options.UseSqlite($"Data Source={dbPath}"));
         services.AddSingleton<ICinemaRepository, CinemaRepository>();
         services.AddSingleton<ICinemaService, CinemaService>();
+        services.AddSingleton<IDialogService, DialogService>();
         Services = services.BuildServiceProvider();
 
         var factory = Services.GetRequiredService<IDbContextFactory<CinemaDbContext>>();

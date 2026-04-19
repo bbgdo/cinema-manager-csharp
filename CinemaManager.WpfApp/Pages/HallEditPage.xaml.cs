@@ -1,13 +1,12 @@
-using System.Windows.Controls;
 using CinemaManager.ViewModels;
 
 namespace CinemaManager.Wpf.Pages;
 
-public partial class ScreeningDetailPage : Page
+public partial class HallEditPage
 {
-    private readonly ScreeningDetailViewModel _vm;
+    private readonly HallEditViewModel _vm;
 
-    public ScreeningDetailPage(ScreeningDetailViewModel vm)
+    public HallEditPage(HallEditViewModel vm)
     {
         InitializeComponent();
         _vm = vm;

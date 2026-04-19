@@ -14,7 +14,8 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         var cinemaService = App.Services.GetRequiredService<ICinemaService>();
-        var navigation = new FrameNavigationService(RootFrame, cinemaService);
+        var dialogService = App.Services.GetRequiredService<IDialogService>();
+        var navigation = new FrameNavigationService(RootFrame, cinemaService, dialogService);
         var vm = new HallListViewModel(cinemaService, navigation);
 
         RootFrame.Navigate(new HallListPage(vm));

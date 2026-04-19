@@ -7,4 +7,9 @@ public interface ICinemaService
     Task<IReadOnlyList<CinemaHallListItem>> GetHallListAsync();
     Task<CinemaHallDetail> GetHallDetailAsync(int hallId);
     Task<ScreeningDetail> GetScreeningDetailAsync(int screeningId);
+    Task<HallEditModel> GetHallForEditAsync(int hallId);
+
+    Task<int> AddHallAsync(HallEditModel model);
+    Task UpdateHallAsync(int hallId, HallEditModel model);
+    Task DeleteHallAsync(int hallId);
 }

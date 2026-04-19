@@ -13,6 +13,8 @@ public class HallListViewModel(ICinemaService cinemaService, INavigationService 
         private set => SetProperty(ref _halls, value);
     }
 
+    public RelayCommand AddHallCommand { get; } = new RelayCommand(() => navigation.GoToHallEdit(null));
+
     public async Task LoadAsync() =>
         await RunAsync(async () => Halls = await cinemaService.GetHallListAsync());
 

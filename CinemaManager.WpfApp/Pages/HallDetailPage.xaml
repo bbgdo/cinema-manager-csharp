@@ -25,25 +25,33 @@
 
                     <TextBlock Text="{Binding Hall.Name}" FontSize="28" FontWeight="Bold" Margin="0 0 0 14"/>
 
-                    <StackPanel Orientation="Horizontal">
-                        <Border CornerRadius="6" Padding="12 5" Margin="0 0 8 0"
-                                Background="{Binding Hall.HallTypeDisplay, Converter={StaticResource HallBadgeColor}}">
-                            <TextBlock Text="{Binding Hall.HallTypeDisplay}"
-                                       FontSize="12" FontWeight="SemiBold" Foreground="White"/>
-                        </Border>
-                        <Border CornerRadius="6" Padding="12 5" Margin="0 0 8 0"
-                                Background="{StaticResource BgInfoChip}">
-                            <TextBlock FontSize="12" Foreground="{StaticResource FgMuted}">
-                                <Run Text="{Binding Hall.SeatsCount, Mode=OneWay}"/>
-                                <Run Text=" seats"/>
-                            </TextBlock>
-                        </Border>
-                        <Border CornerRadius="6" Padding="12 5"
-                                Background="{StaticResource BgInfoChip}">
-                            <TextBlock Text="{Binding Hall.TotalDurationDisplay}"
-                                       FontSize="12" Foreground="{StaticResource FgMuted}"/>
-                        </Border>
-                    </StackPanel>
+                    <Grid>
+                        <StackPanel Orientation="Horizontal">
+                            <Border CornerRadius="6" Padding="12 5" Margin="0 0 8 0"
+                                    Background="{Binding Hall.HallTypeDisplay, Converter={StaticResource HallBadgeColor}}">
+                                <TextBlock Text="{Binding Hall.HallTypeDisplay}"
+                                           FontSize="12" FontWeight="SemiBold" Foreground="White"/>
+                            </Border>
+                            <Border CornerRadius="6" Padding="12 5" Margin="0 0 8 0"
+                                    Background="{StaticResource BgInfoChip}">
+                                <TextBlock FontSize="12" Foreground="{StaticResource FgMuted}">
+                                    <Run Text="{Binding Hall.SeatsCount, Mode=OneWay}"/>
+                                    <Run Text=" seats"/>
+                                </TextBlock>
+                            </Border>
+                            <Border CornerRadius="6" Padding="12 5"
+                                    Background="{StaticResource BgInfoChip}">
+                                <TextBlock Text="{Binding Hall.TotalDurationDisplay}"
+                                           FontSize="12" Foreground="{StaticResource FgMuted}"/>
+                            </Border>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Content="Edit" Style="{StaticResource SecondaryBtn}"
+                                    Command="{Binding EditCommand}" Margin="0 0 8 0"/>
+                            <Button Content="Delete" Style="{StaticResource DangerBtn}"
+                                    Command="{Binding DeleteCommand}"/>
+                        </StackPanel>
+                    </Grid>
                 </StackPanel>
             </Border>
 

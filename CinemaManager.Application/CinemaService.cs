@@ -12,7 +12,7 @@ public class CinemaService(ICinemaRepository repository) : ICinemaService
             {
                 Id = h.Id,
                 Name = h.Name,
-                HallTypeDisplay = FormatHallType(h.HallType),
+                HallTypeDisplay = HallTypeFormatter.Format(h.HallType),
                 SeatsCount = h.SeatsCount
             })
             .ToList();
@@ -29,7 +29,7 @@ public class CinemaService(ICinemaRepository repository) : ICinemaService
         {
             Id = hall.Id,
             Name = hall.Name,
-            HallTypeDisplay = FormatHallType(hall.HallType),
+            HallTypeDisplay = HallTypeFormatter.Format(hall.HallType),
             SeatsCount = hall.SeatsCount,
             TotalDurationDisplay = $"{(int)total.TotalHours}h {total.Minutes:D2}m total",
             Screenings = screenings.Select(MapToScreeningListItem).ToList()
@@ -56,6 +56,37 @@ public class CinemaService(ICinemaRepository repository) : ICinemaService
         };
     }
 
+    public async Task<HallEditModel> GetHallForEditAsync(int hallId)
+    {
+        var hall = await repository.GetHallByIdAsync(hallId)
+            ?? throw new InvalidOperationException($"Hall {hallId} not found.");
+        return new HallEditModel
+        {
+            Name = hall.Name,
+            SeatsCount = hall.SeatsCount,
+            HallType = hall.HallType
+        };
+    }
+
+    public async Task<int> AddHallAsync(HallEditModel model)
+    {
+        var hall = new CinemaHall(0, model.Name.Trim(), model.SeatsCount, model.HallType);
+        return await repository.AddHallAsync(hall);
+    }
+
+    public async Task UpdateHallAsync(int hallId, HallEditModel model)
+    {
+        var hall = await repository.GetHallByIdAsync(hallId)
+            ?? throw new InvalidOperationException($"Hall {hallId} not found.");
+        hall.Name = model.Name.Trim();
+        hall.SeatsCount = model.SeatsCount;
+        hall.HallType = model.HallType;
+        await repository.UpdateHallAsync(hall);
+    }
+
+    public Task DeleteHallAsync(int hallId) =>
+        repository.DeleteHallAsync(hallId);
+
     private static ScreeningListItem MapToScreeningListItem(Screening s)
     {
         var endTime = s.StartTime.AddMinutes(s.DurationMinutes);
@@ -69,15 +100,6 @@ public class CinemaService(ICinemaRepository repository) : ICinemaService
             PosterFileName = s.PosterFileName
         };
     }
-
-    private static string FormatHallType(HallType hallType) => hallType switch
-    {
-        HallType.Standard2D => "2D",
-        HallType.ThreeD     => "3D",
-        HallType.Imax       => "IMAX",
-        HallType.VipLounge  => "VIP",
-        _                   => hallType.ToString()
-    };
 
     private static string FormatGenre(MovieGenre genre) => genre switch
     {

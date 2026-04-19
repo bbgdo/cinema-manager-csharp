@@ -6,7 +6,6 @@ namespace CinemaManager.Wpf.Pages;
 
 public partial class HallDetailPage {
     private readonly HallDetailViewModel _vm;
-    private bool _loaded;
 
     public HallDetailPage(HallDetailViewModel vm)
     {
@@ -15,8 +14,7 @@ public partial class HallDetailPage {
         DataContext = vm;
         Loaded += async (_, _) =>
         {
-            if (_loaded) return;
-            _loaded = true;
+            if (_vm.IsBusy) return;
             await _vm.LoadAsync();
         };
     }
