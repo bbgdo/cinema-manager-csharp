@@ -47,7 +47,7 @@ public class CinemaService(ICinemaRepository repository) : ICinemaService
         {
             Id = s.Id,
             MovieTitle = s.MovieTitle,
-            GenreDisplay = FormatGenre(s.Genre),
+            GenreDisplay = MovieGenreFormatter.Format(s.Genre),
             ReleaseYear = s.ReleaseYear,
             StartTimeDisplay = s.StartTime.ToString("dd.MM.yyyy HH:mm"),
             EndTimeDisplay = endTime.ToString("dd.MM.yyyy HH:mm"),
@@ -87,6 +87,45 @@ public class CinemaService(ICinemaRepository repository) : ICinemaService
     public Task DeleteHallAsync(int hallId) =>
         repository.DeleteHallAsync(hallId);
 
+    public async Task<ScreeningEditModel> GetScreeningForEditAsync(int screeningId)
+    {
+        var s = await repository.GetScreeningByIdAsync(screeningId)
+            ?? throw new InvalidOperationException($"Screening {screeningId} not found.");
+        return new ScreeningEditModel
+        {
+            HallId = s.HallId,
+            MovieTitle = s.MovieTitle,
+            Genre = s.Genre,
+            ReleaseYear = s.ReleaseYear,
+            StartTime = s.StartTime,
+            DurationMinutes = s.DurationMinutes,
+            PosterFileName = s.PosterFileName
+        };
+    }
+
+    public async Task<int> AddScreeningAsync(ScreeningEditModel model)
+    {
+        var screening = new Screening(0, model.HallId, model.MovieTitle.Trim(), model.Genre, model.ReleaseYear, model.StartTime, model.DurationMinutes);
+        screening.PosterFileName = model.PosterFileName;
+        return await repository.AddScreeningAsync(screening);
+    }
+
+    public async Task UpdateScreeningAsync(int screeningId, ScreeningEditModel model)
+    {
+        var screening = await repository.GetScreeningByIdAsync(screeningId)
+            ?? throw new InvalidOperationException($"Screening {screeningId} not found.");
+        screening.MovieTitle = model.MovieTitle.Trim();
+        screening.Genre = model.Genre;
+        screening.ReleaseYear = model.ReleaseYear;
+        screening.StartTime = model.StartTime;
+        screening.DurationMinutes = model.DurationMinutes;
+        screening.PosterFileName = model.PosterFileName;
+        await repository.UpdateScreeningAsync(screening);
+    }
+
+    public Task DeleteScreeningAsync(int screeningId) =>
+        repository.DeleteScreeningAsync(screeningId);
+
     private static ScreeningListItem MapToScreeningListItem(Screening s)
     {
         var endTime = s.StartTime.AddMinutes(s.DurationMinutes);
@@ -95,23 +134,10 @@ public class CinemaService(ICinemaRepository repository) : ICinemaService
             Id = s.Id,
             MovieTitle = s.MovieTitle,
             TimeRange = $"{s.StartTime:HH:mm} – {endTime:HH:mm}",
-            GenreDisplay = FormatGenre(s.Genre),
+            GenreDisplay = MovieGenreFormatter.Format(s.Genre),
             DurationMinutes = s.DurationMinutes,
             PosterFileName = s.PosterFileName
         };
     }
 
-    private static string FormatGenre(MovieGenre genre) => genre switch
-    {
-        MovieGenre.Action   => "Action",
-        MovieGenre.Anime    => "Anime",
-        MovieGenre.Cartoon  => "Cartoon",
-        MovieGenre.Comedy   => "Comedy",
-        MovieGenre.Fantasy  => "Fantasy",
-        MovieGenre.Drama    => "Drama",
-        MovieGenre.Horror   => "Horror",
-        MovieGenre.SciFi    => "Sci-Fi",
-        MovieGenre.Thriller => "Thriller",
-        _                   => genre.ToString()
-    };
 }

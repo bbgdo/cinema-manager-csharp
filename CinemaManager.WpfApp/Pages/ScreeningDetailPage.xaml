@@ -13,8 +13,16 @@
             <Border Grid.Row="0" Padding="36 20 36 20"
                     BorderThickness="0 0 0 1" BorderBrush="{StaticResource BorderCol}"
                     Background="{StaticResource BgHeader}">
-                <Button Content="&#8592;  Back to Hall" Style="{StaticResource BackBtn}"
-                        HorizontalAlignment="Left" Command="{Binding BackCommand}"/>
+                <Grid>
+                    <Button Content="&#8592;  Back to Hall" Style="{StaticResource BackBtn}"
+                            HorizontalAlignment="Left" VerticalAlignment="Center" Command="{Binding BackCommand}"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Edit" Style="{StaticResource SecondaryBtn}"
+                                Command="{Binding EditCommand}" Margin="0 0 8 0"/>
+                        <Button Content="Delete" Style="{StaticResource DangerBtn}"
+                                Command="{Binding DeleteCommand}"/>
+                    </StackPanel>
+                </Grid>
             </Border>
 
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">

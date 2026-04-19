@@ -13,10 +13,16 @@ public class FrameNavigationService(Frame frame, ICinemaService cinemaService, I
         frame.Navigate(new HallDetailPage(vm));
     }
 
-    public void GoToScreeningDetail(int screeningId, string hallName)
+    public void GoToScreeningDetail(int screeningId, int hallId, string hallName)
     {
-        var vm = new ScreeningDetailViewModel(screeningId, hallName, cinemaService, this);
+        var vm = new ScreeningDetailViewModel(screeningId, hallId, hallName, cinemaService, this, dialogService);
         frame.Navigate(new ScreeningDetailPage(vm));
+    }
+
+    public void GoToScreeningEdit(int? screeningId, int hallId, string hallName)
+    {
+        var vm = new ScreeningEditViewModel(screeningId, hallId, hallName, cinemaService, this);
+        frame.Navigate(new ScreeningEditPage(vm));
     }
 
     public void GoToHallEdit(int? hallId)

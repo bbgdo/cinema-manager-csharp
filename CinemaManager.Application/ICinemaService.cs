@@ -12,4 +12,9 @@ public interface ICinemaService
     Task<int> AddHallAsync(HallEditModel model);
     Task UpdateHallAsync(int hallId, HallEditModel model);
     Task DeleteHallAsync(int hallId);
+
+    Task<ScreeningEditModel> GetScreeningForEditAsync(int screeningId);
+    Task<int> AddScreeningAsync(ScreeningEditModel model);
+    Task UpdateScreeningAsync(int screeningId, ScreeningEditModel model);
+    Task DeleteScreeningAsync(int screeningId);
 }

@@ -52,4 +52,28 @@ public class CinemaRepository(IDbContextFactory<CinemaDbContext> factory) : ICin
         ctx.Halls.Remove(hall);
         await ctx.SaveChangesAsync();
     }
+
+    public async Task<int> AddScreeningAsync(Screening screening)
+    {
+        await using var ctx = await factory.CreateDbContextAsync();
+        ctx.Screenings.Add(screening);
+        await ctx.SaveChangesAsync();
+        return screening.Id;
+    }
+
+    public async Task UpdateScreeningAsync(Screening screening)
+    {
+        await using var ctx = await factory.CreateDbContextAsync();
+        ctx.Screenings.Update(screening);
+        await ctx.SaveChangesAsync();
+    }
+
+    public async Task DeleteScreeningAsync(int screeningId)
+    {
+        await using var ctx = await factory.CreateDbContextAsync();
+        var screening = await ctx.Screenings.FindAsync(screeningId);
+        if (screening is null) return;
+        ctx.Screenings.Remove(screening);
+        await ctx.SaveChangesAsync();
+    }
 }

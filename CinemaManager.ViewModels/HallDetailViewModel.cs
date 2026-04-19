@@ -11,16 +11,22 @@ public class HallDetailViewModel : ObservableObject
     private readonly INavigationService _navigation;
     private readonly IDialogService _dialogService;
     private CinemaHallDetail? _hall;
+    private readonly RelayCommand _addScreeningCommand;
 
     public CinemaHallDetail? Hall
     {
         get => _hall;
-        private set => SetProperty(ref _hall, value);
+        private set
+        {
+            if (SetProperty(ref _hall, value))
+                _addScreeningCommand.RaiseCanExecuteChanged();
+        }
     }
 
     public ICommand BackCommand { get; }
     public ICommand EditCommand { get; }
     public ICommand DeleteCommand { get; }
+    public ICommand AddScreeningCommand => _addScreeningCommand;
 
     public HallDetailViewModel(int hallId, ICinemaService cinemaService, INavigationService navigation, IDialogService dialogService)
     {
@@ -31,13 +37,16 @@ public class HallDetailViewModel : ObservableObject
         BackCommand = new RelayCommand(() => _navigation.GoBack());
         EditCommand = new RelayCommand(() => _navigation.GoToHallEdit(_hallId));
         DeleteCommand = new AsyncRelayCommand(DeleteAsync);
+        _addScreeningCommand = new RelayCommand(
+            () => _navigation.GoToScreeningEdit(null, _hallId, Hall?.Name ?? string.Empty),
+            () => Hall is not null);
     }
 
     public async Task LoadAsync() =>
         await RunAsync(async () => Hall = await _cinemaService.GetHallDetailAsync(_hallId));
 
     public void OnScreeningSelected(ScreeningListItem screening) =>
-        _navigation.GoToScreeningDetail(screening.Id, Hall?.Name ?? string.Empty);
+        _navigation.GoToScreeningDetail(screening.Id, _hallId, Hall?.Name ?? string.Empty);
 
     private async Task DeleteAsync()
     {

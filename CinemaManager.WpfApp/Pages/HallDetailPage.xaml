@@ -55,9 +55,14 @@
                 </StackPanel>
             </Border>
 
-            <TextBlock Grid.Row="1" Text="Screenings"
-                       FontSize="16" FontWeight="SemiBold"
-                       Margin="36 20 36 0"/>
+            <Grid Grid.Row="1" Margin="36 20 36 0">
+                <TextBlock Text="Screenings"
+                           FontSize="16" FontWeight="SemiBold"
+                           VerticalAlignment="Center"/>
+                <Button Content="+ Add Screening" Style="{StaticResource PrimaryBtn}"
+                        Command="{Binding AddScreeningCommand}"
+                        HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            </Grid>
 
             <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
                 <ListBox x:Name="ScreeningListBox"

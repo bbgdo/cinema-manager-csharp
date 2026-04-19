@@ -12,4 +12,8 @@ public interface ICinemaRepository
     Task<int> AddHallAsync(CinemaHall hall);
     Task UpdateHallAsync(CinemaHall hall);
     Task DeleteHallAsync(int hallId);
+
+    Task<int> AddScreeningAsync(Screening screening);
+    Task UpdateScreeningAsync(Screening screening);
+    Task DeleteScreeningAsync(int screeningId);
 }
