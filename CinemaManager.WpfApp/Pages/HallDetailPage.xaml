@@ -8,6 +8,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
@@ -64,10 +65,35 @@
                         HorizontalAlignment="Right" VerticalAlignment="Center"/>
             </Grid>
 
-            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <Grid Grid.Row="2" Margin="36 10 20 8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0"
+                         Text="{Binding ScreeningSearchText, UpdateSourceTrigger=PropertyChanged}"
+                         Style="{StaticResource FieldTxt}"
+                         Margin="0 0 10 0"/>
+                <ComboBox Grid.Column="1"
+                          ItemsSource="{Binding GenreFilterOptions}"
+                          SelectedItem="{Binding GenreFilter}"
+                          DisplayMemberPath="Display"
+                          Style="{StaticResource FieldCmb}"
+                          Margin="0 0 10 0"/>
+                <ComboBox Grid.Column="2"
+                          ItemsSource="{Binding ScreeningSortOptions}"
+                          SelectedValue="{Binding SelectedScreeningSort}"
+                          SelectedValuePath="Value"
+                          DisplayMemberPath="Display"
+                          Style="{StaticResource FieldCmb}"/>
+            </Grid>
+
+            <ScrollViewer Grid.Row="3" VerticalScrollBarVisibility="Auto">
                 <ListBox x:Name="ScreeningListBox"
-                         Margin="36 14 20 28"
-                         ItemsSource="{Binding Hall.Screenings}"
+                         Margin="36 10 20 28"
+                         ItemsSource="{Binding ScreeningsView}"
                          Style="{StaticResource CleanLB}"
                          ItemContainerStyle="{StaticResource CleanLBI}"
                          SelectionChanged="ScreeningListBox_SelectionChanged">

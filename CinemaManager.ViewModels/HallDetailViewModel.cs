@@ -1,6 +1,9 @@
+using System.ComponentModel;
+using System.Windows.Data;
 using System.Windows.Input;
 using CinemaManager.Application;
 using CinemaManager.Application.Dtos;
+using CinemaManager.Models;
 
 namespace CinemaManager.ViewModels;
 
@@ -10,8 +13,14 @@ public class HallDetailViewModel : ObservableObject
     private readonly ICinemaService _cinemaService;
     private readonly INavigationService _navigation;
     private readonly IDialogService _dialogService;
-    private CinemaHallDetail? _hall;
     private readonly RelayCommand _addScreeningCommand;
+
+    private CinemaHallDetail? _hall;
+    private List<ScreeningListItem> _allScreenings = [];
+    private ICollectionView? _screeningsView;
+    private string _screeningSearchText = string.Empty;
+    private MovieGenreFilterOption _genreFilter;
+    private ScreeningSortOption _selectedScreeningSort = ScreeningSortOption.TimeAsc;
 
     public CinemaHallDetail? Hall
     {
@@ -22,6 +31,45 @@ public class HallDetailViewModel : ObservableObject
                 _addScreeningCommand.RaiseCanExecuteChanged();
         }
     }
+
+    public ICollectionView? ScreeningsView
+    {
+        get => _screeningsView;
+        private set => SetProperty(ref _screeningsView, value);
+    }
+
+    public string ScreeningSearchText
+    {
+        get => _screeningSearchText;
+        set
+        {
+            if (SetProperty(ref _screeningSearchText, value))
+                _screeningsView?.Refresh();
+        }
+    }
+
+    public MovieGenreFilterOption GenreFilter
+    {
+        get => _genreFilter;
+        set
+        {
+            if (SetProperty(ref _genreFilter, value))
+                _screeningsView?.Refresh();
+        }
+    }
+
+    public ScreeningSortOption SelectedScreeningSort
+    {
+        get => _selectedScreeningSort;
+        set
+        {
+            if (SetProperty(ref _selectedScreeningSort, value))
+                ApplyScreeningSort();
+        }
+    }
+
+    public IReadOnlyList<MovieGenreFilterOption> GenreFilterOptions { get; }
+    public IReadOnlyList<ScreeningSortOptionItem> ScreeningSortOptions { get; }
 
     public ICommand BackCommand { get; }
     public ICommand EditCommand { get; }
@@ -34,6 +82,22 @@ public class HallDetailViewModel : ObservableObject
         _cinemaService = cinemaService;
         _navigation = navigation;
         _dialogService = dialogService;
+
+        GenreFilterOptions = new MovieGenreFilterOption[] { new() { Value = null, Display = "All genres" } }
+            .Concat(Enum.GetValues<MovieGenre>()
+                .Select(g => new MovieGenreFilterOption { Value = MovieGenreFormatter.Format(g), Display = MovieGenreFormatter.Format(g) }))
+            .ToList();
+        ScreeningSortOptions =
+        [
+            new() { Value = ScreeningSortOption.TimeAsc,      Display = "Time ↑" },
+            new() { Value = ScreeningSortOption.TimeDesc,     Display = "Time ↓" },
+            new() { Value = ScreeningSortOption.TitleAsc,     Display = "Title A–Z" },
+            new() { Value = ScreeningSortOption.TitleDesc,    Display = "Title Z–A" },
+            new() { Value = ScreeningSortOption.DurationAsc,  Display = "Duration ↑" },
+            new() { Value = ScreeningSortOption.DurationDesc, Display = "Duration ↓" },
+        ];
+        _genreFilter = GenreFilterOptions[0];
+
         BackCommand = new RelayCommand(() => _navigation.GoBack());
         EditCommand = new RelayCommand(() => _navigation.GoToHallEdit(_hallId));
         DeleteCommand = new AsyncRelayCommand(DeleteAsync);
@@ -42,11 +106,45 @@ public class HallDetailViewModel : ObservableObject
             () => Hall is not null);
     }
 
-    public async Task LoadAsync() =>
-        await RunAsync(async () => Hall = await _cinemaService.GetHallDetailAsync(_hallId));
+    public async Task LoadAsync() => await RunAsync(async () =>
+    {
+        Hall = await _cinemaService.GetHallDetailAsync(_hallId);
+        _allScreenings = [.. Hall.Screenings];
+        var view = CollectionViewSource.GetDefaultView(_allScreenings);
+        view.Filter = FilterScreening;
+        ScreeningsView = view;
+        ApplyScreeningSort();
+    });
 
     public void OnScreeningSelected(ScreeningListItem screening) =>
         _navigation.GoToScreeningDetail(screening.Id, _hallId, Hall?.Name ?? string.Empty);
+
+    private bool FilterScreening(object item)
+    {
+        if (item is not ScreeningListItem s) return false;
+        if (!string.IsNullOrWhiteSpace(ScreeningSearchText) &&
+            !s.MovieTitle.Contains(ScreeningSearchText.Trim(), StringComparison.OrdinalIgnoreCase))
+            return false;
+        if (_genreFilter.Value is { } genreVal && s.GenreDisplay != genreVal)
+            return false;
+        return true;
+    }
+
+    private void ApplyScreeningSort()
+    {
+        if (_screeningsView is null) return;
+        _screeningsView.SortDescriptions.Clear();
+        _screeningsView.SortDescriptions.Add(SelectedScreeningSort switch
+        {
+            ScreeningSortOption.TitleAsc     => new SortDescription(nameof(ScreeningListItem.MovieTitle), ListSortDirection.Ascending),
+            ScreeningSortOption.TitleDesc    => new SortDescription(nameof(ScreeningListItem.MovieTitle), ListSortDirection.Descending),
+            ScreeningSortOption.TimeAsc      => new SortDescription(nameof(ScreeningListItem.StartTime), ListSortDirection.Ascending),
+            ScreeningSortOption.TimeDesc     => new SortDescription(nameof(ScreeningListItem.StartTime), ListSortDirection.Descending),
+            ScreeningSortOption.DurationAsc  => new SortDescription(nameof(ScreeningListItem.DurationMinutes), ListSortDirection.Ascending),
+            ScreeningSortOption.DurationDesc => new SortDescription(nameof(ScreeningListItem.DurationMinutes), ListSortDirection.Descending),
+            _ => new SortDescription(nameof(ScreeningListItem.StartTime), ListSortDirection.Ascending)
+        });
+    }
 
     private async Task DeleteAsync()
     {

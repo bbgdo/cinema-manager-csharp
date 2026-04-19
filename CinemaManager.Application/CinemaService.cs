@@ -136,7 +136,8 @@ public class CinemaService(ICinemaRepository repository) : ICinemaService
             TimeRange = $"{s.StartTime:HH:mm} – {endTime:HH:mm}",
             GenreDisplay = MovieGenreFormatter.Format(s.Genre),
             DurationMinutes = s.DurationMinutes,
-            PosterFileName = s.PosterFileName
+            PosterFileName = s.PosterFileName,
+            StartTime = s.StartTime
         };
     }
 

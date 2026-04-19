@@ -8,4 +8,5 @@ public class ScreeningListItem
     public string GenreDisplay { get; init; } = string.Empty;
     public int DurationMinutes { get; init; }
     public string PosterFileName { get; init; } = string.Empty;
+    public DateTime StartTime { get; init; }
 }
